@@ -13,59 +13,6 @@ import (
 	"github.com/iqrahadian/brick-web-scrapper-assesment/scrapper"
 )
 
-func mainCsv() {
-	// func main() {
-
-	csvRepo, _ := filerepo.NewFileRepo(filerepo.FileRepoCsvType, 2)
-
-	err := csvRepo.Save([]model.Product{})
-	if err != nil {
-		fmt.Println("ERR", err)
-	}
-
-}
-
-// func mainTest() {
-
-// 	var wg sync.WaitGroup
-
-// 	headlessClient := headlessclient.NewClient(1, 5*time.Second)
-
-// 	productList, _ := scrapper.ExtractProductList(page1)
-
-// 	i := 0
-// 	for _, product := range productList {
-
-// 		if strings.Contains(product.ProductUrl, "https://ta.tokopedia.com") {
-// 			continue
-// 		}
-// 		if i > 2 {
-// 			break
-// 		}
-
-// 		go func(hc *headlessclient.RLHeadlessClient, product model.Product, wg *sync.WaitGroup) {
-// 			wg.Add(1)
-// 			defer wg.Done()
-// 			detailedProduct, err := scrapper.ScrapProductDetailPage(hc, product)
-
-// 			if err != nil {
-// 				fmt.Println("Name : ", detailedProduct.Name)
-// 				fmt.Println("ERROR : ", err)
-// 			} else {
-// 				fmt.Println("Name : ", detailedProduct.Name)
-// 				// fmt.Println("Description : ", detailedProduct.Description)
-// 				fmt.Println("Rate : ", detailedProduct.Rating)
-// 			}
-// 		}(&headlessClient, product, &wg)
-
-// 		i += 1
-// 		fmt.Println("===========================")
-// 	}
-
-// 	wg.Wait()
-
-// }
-
 func main() {
 
 	//init http client with rate limiter
