@@ -36,7 +36,7 @@ func main() {
 	}
 	fmt.Println("BASE PRODUCT COUNT : ", len(baseProductList))
 
-	fmt.Println("Start submitting product to channel, to complete the data")
+	fmt.Println("Start submitting product to channel, to complete the data") // see startProductScrapper function
 	for _, baseProduct := range baseProductList {
 		productChannel <- baseProduct
 	}
