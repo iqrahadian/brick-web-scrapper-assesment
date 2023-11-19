@@ -1,23 +1,27 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
 
 type Product struct {
-	ID          uint `gorm:"primaryKey"`
+	ID          string `gorm:"primaryKey"`
 	Name        string
 	ProductUrl  string
 	Description string
 	ImageUrl    string
 	Price       float64
-	Rating      float32
+	Rating      float64
 	Merchant    string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
 
-// type Model struct {
-// 	ID        uint
-// 	CreatedAt time.Time
-// 	UpdatedAt time.Time
-// 	DeletedAt gorm.DeletedAt `gorm:"index"`
-// }
+func (p *Product) BeforeCreate(tx *gorm.DB) (err error) {
+	// UUID version 4
+	p.ID = uuid.NewString()
+	return
+}

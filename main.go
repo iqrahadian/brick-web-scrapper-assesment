@@ -9,6 +9,7 @@ import (
 	"github.com/iqrahadian/brick-web-scrapper-assesment/model"
 	"github.com/iqrahadian/brick-web-scrapper-assesment/repo/filerepo"
 	"github.com/iqrahadian/brick-web-scrapper-assesment/repo/headlessclient"
+	"github.com/iqrahadian/brick-web-scrapper-assesment/repo/sqlite"
 	"github.com/iqrahadian/brick-web-scrapper-assesment/scrapper"
 )
 
@@ -122,6 +123,25 @@ func main() {
 	err := csvRepo.Save(scrapper.ProductArr)
 	if err != nil {
 		fmt.Println("ERR", err)
+	}
+
+	db := sqlite.Connect()
+	// fmt.Println(sqlite.Count(db))
+
+	// batch size 100
+	db.CreateInBatches(scrapper.ProductArr, 2)
+
+	var users []model.Product
+	// Get all records
+	result := db.Find(&users)
+
+	_, err = result.Rows()
+	if err != nil {
+		fmt.Println("Failed to select from database", err)
+	}
+
+	for _, prod := range users {
+		fmt.Println(prod.ID, prod.Name)
 	}
 
 	fmt.Println("GOT HERE DONE")

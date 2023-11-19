@@ -109,13 +109,13 @@ func ExtractProductPage(product model.Product, stringHtml string) (model.Product
 	return product, nil
 }
 
-func parseRate(r string) (float32, error) {
+func parseRate(r string) (float64, error) {
 
-	rate, err := strconv.ParseFloat(r, 32)
+	rate, err := strconv.ParseFloat(r, 64)
 	if err != nil {
 		return 0, err
 	}
 
-	return float32(rate), nil
+	return rate, nil
 
 }
