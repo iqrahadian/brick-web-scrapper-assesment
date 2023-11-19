@@ -3,7 +3,6 @@ package scrapper
 import (
 	"errors"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 
@@ -13,12 +12,12 @@ import (
 
 var productMap = make(map[string]model.Product)
 
-func ExtractProductList(stringHtml string) []model.Product {
+func ExtractProductList(stringHtml string) ([]model.Product, error) {
 	productList := []model.Product{}
 
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(stringHtml))
 	if err != nil {
-		log.Fatal(err)
+		return []model.Product{}, err
 	}
 
 	doc.Find("div.css-bk6tzz").Each(func(i int, s *goquery.Selection) {
@@ -31,7 +30,7 @@ func ExtractProductList(stringHtml string) []model.Product {
 		}
 	})
 
-	return productList
+	return productList, nil
 }
 
 func parseSingleProductList(doc *goquery.Selection) (model.Product, error) {
@@ -88,5 +87,34 @@ func parsePrice(price string) (float64, error) {
 }
 
 func ExtractProductPage(product model.Product, stringHtml string) (model.Product, error) {
-	return model.Product{}, nil
+
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(stringHtml))
+	if err != nil {
+		return product, err
+	}
+
+	// we can assume all product will have at least 1 star rating, because we take top 100 product
+	rate, err := parseRate(doc.Find("div.css-8atqhb > div.css-856ghu > div.css-1m5sihj > div.css-1fogemr > div.css-jmbq56 > div.css-bczdt6 > div.items > p.css-vni7t6-unf-heading > span > span.main").Text())
+	if err != nil {
+		return product, err
+	}
+
+	description := doc.Find("span.css-11oczh8 > span.css-17zm3l > div").Text()
+	description = strings.ReplaceAll(description, "	", " ")
+
+	product.Description = description
+	product.Rating = rate
+
+	return product, nil
+}
+
+func parseRate(r string) (float32, error) {
+
+	rate, err := strconv.ParseFloat(r, 32)
+	if err != nil {
+		return 0, err
+	}
+
+	return float32(rate), nil
+
 }

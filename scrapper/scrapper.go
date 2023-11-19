@@ -6,12 +6,12 @@ import (
 )
 
 func ScrapProductListPage(client *httpclient.RLHTTPClient, url string) ([]model.Product, error) {
-	stringHtml, err := RetrieveProductListPage(client, url)
+	stringHtml, err := RetrieveProductListPage(url)
 	if err != nil {
 		return []model.Product{}, err
 	}
 
-	productList := ExtractProductList(stringHtml)
+	productList, err := ExtractProductList(stringHtml)
 	if err != nil {
 		return []model.Product{}, err
 	}
@@ -19,17 +19,17 @@ func ScrapProductListPage(client *httpclient.RLHTTPClient, url string) ([]model.
 	return productList, nil
 }
 
-func ScrapProductDetailPage(client *httpclient.RLHTTPClient, product model.Product) {
+func ScrapProductDetailPage(client *httpclient.RLHTTPClient, product model.Product) (model.Product, error) {
 
-	stringHtml, err := RetrieveProductDetailPage(client, product.ProductUrl)
+	stringHtml, err := RetrieveProductDetailPage(product.ProductUrl)
 	if err != nil {
-		return
+		return product, err
 	}
 
 	product, err = ExtractProductPage(product, stringHtml)
 	if err != nil {
-		return
+		return product, err
 	}
 
-	// put product to saving queue
+	return product, err
 }

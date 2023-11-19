@@ -2,23 +2,23 @@ package scrapper
 
 import (
 	"github.com/go-rod/rod"
-	"github.com/iqrahadian/brick-web-scrapper-assesment/repo/httpclient"
 )
 
 func retrieveHtmlPage(url string) (string, error) {
 
 	page := rod.New().MustConnect().MustPage(url).MustWaitStable()
 	defer page.MustClose()
+	page.Mouse.MustScroll(0, 300)
 
 	stringHtml, err := page.HTML()
 	return stringHtml, err
 
 }
 
-func RetrieveProductListPage(client *httpclient.RLHTTPClient, url string) (string, error) {
-	return "", nil
+func RetrieveProductListPage(url string) (string, error) {
+	return retrieveHtmlPage(url)
 }
 
-func RetrieveProductDetailPage(client *httpclient.RLHTTPClient, url string) (string, error) {
-	return "", nil
+func RetrieveProductDetailPage(url string) (string, error) {
+	return retrieveHtmlPage(url)
 }

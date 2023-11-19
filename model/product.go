@@ -9,7 +9,7 @@ type Product struct {
 	Description  string
 	ImageUrl     string
 	Price        float64
-	Rating       int
+	Rating       float32
 	MerchantName string
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
