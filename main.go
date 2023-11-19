@@ -160,6 +160,11 @@ func main() {
 
 	fmt.Println("DONE")
 
+	// this line to make the process not exited
+	// to check file csv created in tmp folder, need to get into container
+	wg.Add(1)
+	wg.Wait()
+
 }
 
 func startProductScrapper(
