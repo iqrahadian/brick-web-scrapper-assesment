@@ -25,18 +25,19 @@ func main() {
 		reportChannel = make(chan model.Product)
 	)
 
-	startProductScrapper(&wg, &headlessClient, jobChannel)
+	// init multithread to scrape product detail
+	startProductScrapper(&wg, &headlessClient, jobChannel, reportChannel)
+
+	productList := []model.Product{}
 
 	tokpedUrl := []string{
 		"https://www.tokopedia.com/p/handphone-tablet/handphone?ob=5&page=1",
 		"https://www.tokopedia.com/p/handphone-tablet/handphone?ob=5&page=2",
 	}
 
-	productList := []model.Product{}
-
 	productLen := 0
 	for _, url := range tokpedUrl {
-		if productLen > 10 {
+		if productLen > 100 {
 			break
 		}
 
@@ -107,18 +108,13 @@ func main() {
 
 	fmt.Println("DONE")
 
-	// this line to make the process not exited
-	// to check file csv created in tmp folder, need to get into container
-	wg.Add(1)
-	wg.Wait()
-
 }
 
 func startProductScrapper(
 	wg *sync.WaitGroup,
 	client *headlessclient.RLHeadlessClient,
 	productChannel <-chan model.Product,
-
+	reportChan chan<- model.Product,
 ) {
 	for worker := 1; worker <= 5; worker++ {
 		wg.Add(1)
@@ -141,8 +137,7 @@ func startProductScrapper(
 					}
 
 				}
-
-				scrapper.AppendTo(product)
+				reportChan <- product
 			}
 
 		}()
