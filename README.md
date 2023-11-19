@@ -3,6 +3,9 @@
 ### base architecture
 ![brick](https://github.com/iqrahadian/brick-web-scrapper-assesment/assets/13548762/c974d681-125e-418a-8765-62a6543f8e56)
 
+### To Execute
+- go mod vendor
+- go run *.go
 
 ### ToDo
 1. Handling url that start with ta.tokopedia.com for detail product page, failed to retrieve page because of security issue, resulting in rating & description will be empty
