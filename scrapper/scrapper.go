@@ -2,11 +2,21 @@ package scrapper
 
 import (
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/iqrahadian/brick-web-scrapper-assesment/model"
 	"github.com/iqrahadian/brick-web-scrapper-assesment/repo/headlessclient"
 )
+
+var Mutex = &sync.RWMutex{}
+var ProductArr = []model.Product{}
+
+func AppendTo(product model.Product) {
+	Mutex.Lock()
+	ProductArr = append(ProductArr, product)
+	Mutex.Unlock()
+}
 
 func ScrapProductListPage(client *headlessclient.RLHeadlessClient, url string) ([]model.Product, error) {
 	stringHtml, err := RetrieveProductListPage(client, url)

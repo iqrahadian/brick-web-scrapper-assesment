@@ -7,11 +7,24 @@ import (
 	"time"
 
 	"github.com/iqrahadian/brick-web-scrapper-assesment/model"
+	"github.com/iqrahadian/brick-web-scrapper-assesment/repo/filerepo"
 	"github.com/iqrahadian/brick-web-scrapper-assesment/repo/headlessclient"
 	"github.com/iqrahadian/brick-web-scrapper-assesment/scrapper"
 )
 
-func main2() {
+func mainCsv() {
+	// func main() {
+
+	csvRepo, _ := filerepo.NewFileRepo(filerepo.FileRepoCsvType, 2)
+
+	err := csvRepo.Save([]model.Product{})
+	if err != nil {
+		fmt.Println("ERR", err)
+	}
+
+}
+
+func mainTest() {
 
 	var wg sync.WaitGroup
 
@@ -104,6 +117,13 @@ func main() {
 	close(jobChannel)
 	wg.Wait()
 
+	csvRepo, _ := filerepo.NewFileRepo(filerepo.FileRepoCsvType, 2)
+
+	err := csvRepo.Save(scrapper.ProductArr)
+	if err != nil {
+		fmt.Println("ERR", err)
+	}
+
 	fmt.Println("GOT HERE DONE")
 
 }
@@ -111,11 +131,11 @@ func main() {
 func startProductScrapper(wg *sync.WaitGroup, client *headlessclient.RLHeadlessClient, productChannel <-chan model.Product) {
 	for worker := 1; worker <= 5; worker++ {
 		wg.Add(1)
-		go func(w *sync.WaitGroup, pc <-chan model.Product) {
+		go func() {
 
 			defer wg.Done()
 
-			for product := range pc {
+			for product := range productChannel {
 				if !strings.Contains(product.ProductUrl, "https://ta.tokopedia.com") {
 					product, err := scrapper.ScrapProductDetailPage(client, product)
 					if err != nil {
@@ -126,15 +146,18 @@ func startProductScrapper(wg *sync.WaitGroup, client *headlessclient.RLHeadlessC
 						fmt.Println("Price : ", product.Price)
 						fmt.Println("Rate : ", product.Rating)
 					}
+
 				} else {
 					fmt.Println("Name : ", product.Name)
 					fmt.Println("Skipping because ta.tokopedia")
+
 				}
 
+				scrapper.AppendTo(product)
 				fmt.Println("================================")
 			}
 
-		}(wg, productChannel)
+		}()
 	}
 
 }

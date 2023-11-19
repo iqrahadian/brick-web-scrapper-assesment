@@ -3,16 +3,16 @@ package model
 import "time"
 
 type Product struct {
-	ID           uint `gorm:"primaryKey"`
-	Name         string
-	ProductUrl   string
-	Description  string
-	ImageUrl     string
-	Price        float64
-	Rating       float32
-	MerchantName string
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
+	ID          uint `gorm:"primaryKey"`
+	Name        string
+	ProductUrl  string
+	Description string
+	ImageUrl    string
+	Price       float64
+	Rating      float32
+	Merchant    string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 // type Model struct {

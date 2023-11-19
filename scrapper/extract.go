@@ -62,11 +62,11 @@ func parseSingleProductList(doc *goquery.Selection) (model.Product, error) {
 	}
 
 	return model.Product{
-		Name:         title,
-		Price:        price,
-		ProductUrl:   productUrl,
-		MerchantName: merChantName,
-		ImageUrl:     imageUrl,
+		Name:       title,
+		Price:      price,
+		ProductUrl: productUrl,
+		Merchant:   merChantName,
+		ImageUrl:   imageUrl,
 	}, nil
 
 }
@@ -101,6 +101,7 @@ func ExtractProductPage(product model.Product, stringHtml string) (model.Product
 
 	description := doc.Find("span.css-11oczh8 > span.css-17zm3l > div").Text()
 	description = strings.ReplaceAll(description, "	", " ")
+	description = strings.ReplaceAll(description, "\t", " ")
 
 	product.Description = description
 	product.Rating = rate
