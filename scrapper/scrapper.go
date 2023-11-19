@@ -16,7 +16,7 @@ func ScrapTopProductList(client *headlessclient.RLHeadlessClient) ([]model.Produ
 		// "https://www.tokopedia.com/p/handphone-tablet/handphone?ob=5&page=2",
 	}
 
-	maxProduct := 10
+	maxProduct := 100
 	productList := []model.Product{}
 	for _, url := range tokpedUrl {
 		if len(productList) > maxProduct {

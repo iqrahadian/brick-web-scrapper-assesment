@@ -37,10 +37,7 @@ func main() {
 	fmt.Println("BASE PRODUCT COUNT : ", len(baseProductList))
 
 	fmt.Println("Start submitting product to channel, to complete the data")
-	for idx, baseProduct := range baseProductList {
-		if idx > 10 {
-			break
-		}
+	for _, baseProduct := range baseProductList {
 		productChannel <- baseProduct
 	}
 

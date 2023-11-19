@@ -11,3 +11,6 @@
 1. Handling url that start with ta.tokopedia.com for detail product page, failed to retrieve page because of security issue, resulting in rating & description will be empty
 2. implement config to run with postgres, currently using sqlite for simplicity
 3. implement config/env
+
+### notes
+1. const*.go file is used for testing html scrapper
