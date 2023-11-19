@@ -46,8 +46,8 @@ func (c CsvRepo) Save(products []model.Product) error {
 
 		filePath := fmt.Sprintf("%s/%s-%f.csv", folderTarget, baseFileName, i)
 		startRow := int(i * float64(c.rowLimit))
-
 		endRow := c.rowLimit * (int(i) + 1)
+
 		if startRow+c.rowLimit >= len(products) {
 			endRow = len(products) - 1
 		}
@@ -75,8 +75,8 @@ func (c CsvRepo) executeWrite(filePath string, products []model.Product) error {
 	writer := csv.NewWriter(file)
 	writer.Comma = '\t'
 	defer writer.Flush()
-	// this defines the header value and data values for the new csv file
-	headers := []string{"Title", "Rate", "Price", "Merchant"}
+
+	headers := []string{"Title", "Rate", "Price", "Merchant", "ProductUrl", "ImageUrl", "Description"}
 
 	writer.Write(headers)
 	for _, product := range products {
@@ -86,6 +86,8 @@ func (c CsvRepo) executeWrite(filePath string, products []model.Product) error {
 			strconv.FormatFloat(float64(product.Rating), 'f', -1, 64),
 			strconv.FormatFloat(product.Price, 'f', -2, 64),
 			product.Merchant,
+			product.ProductUrl,
+			product.ImageUrl,
 			product.Description,
 		}
 
