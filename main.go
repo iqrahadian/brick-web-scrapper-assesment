@@ -45,7 +45,8 @@ func main() {
 	}
 
 	for _, product := range productList {
-		jobChannel <- product
+		fmt.Println(product)
+		// jobChannel <- product
 	}
 
 }

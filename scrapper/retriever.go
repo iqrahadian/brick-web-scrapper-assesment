@@ -15,6 +15,10 @@ func retrieveHtmlPage(url string) (string, error) {
 
 }
 
-func RetrieveProductListPage(client *httpclient.RLHTTPClient, url string) (string, error)
+func RetrieveProductListPage(client *httpclient.RLHTTPClient, url string) (string, error) {
+	return "", nil
+}
 
-func RetrieveProductDetailPage(client *httpclient.RLHTTPClient, url string) (string, error)
+func RetrieveProductDetailPage(client *httpclient.RLHTTPClient, url string) (string, error) {
+	return "", nil
+}
