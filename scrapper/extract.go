@@ -10,8 +10,6 @@ import (
 	"github.com/iqrahadian/brick-web-scrapper-assesment/model"
 )
 
-var productMap = make(map[string]model.Product)
-
 func ExtractProductList(stringHtml string) ([]model.Product, error) {
 	productList := []model.Product{}
 

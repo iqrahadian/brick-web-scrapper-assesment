@@ -8,14 +8,12 @@ import (
 	"gorm.io/gorm"
 )
 
-func Connect() *gorm.DB {
-	fmt.Println("INIT DB")
+func NewClient() *gorm.DB {
 	db, err := gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println("MIGRATE")
 	err = db.AutoMigrate(&model.Product{})
 	if err != nil {
 		fmt.Println("ERROR MIGRATE")
