@@ -91,17 +91,18 @@ func ExtractProductPage(product model.Product, stringHtml string) (model.Product
 		return product, err
 	}
 
+	description := doc.Find("span.css-11oczh8 > span.css-17zm3l > div").Text()
+	description = strings.ReplaceAll(description, "	", " ")
+	description = strings.ReplaceAll(description, "\t", " ")
+
+	product.Description = description
+
 	// we can assume all product will have at least 1 star rating, because we take top 100 product
 	rate, err := parseRate(doc.Find("div.css-8atqhb > div.css-856ghu > div.css-1m5sihj > div.css-1fogemr > div.css-jmbq56 > div.css-bczdt6 > div.items > p.css-vni7t6-unf-heading > span > span.main").Text())
 	if err != nil {
 		return product, err
 	}
 
-	description := doc.Find("span.css-11oczh8 > span.css-17zm3l > div").Text()
-	description = strings.ReplaceAll(description, "	", " ")
-	description = strings.ReplaceAll(description, "\t", " ")
-
-	product.Description = description
 	product.Rating = rate
 
 	return product, nil

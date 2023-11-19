@@ -2,7 +2,6 @@ package scrapper
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/iqrahadian/brick-web-scrapper-assesment/model"
 	"github.com/iqrahadian/brick-web-scrapper-assesment/repo/headlessclient"
@@ -14,15 +13,16 @@ func ScrapTopProductList(client *headlessclient.RLHeadlessClient) ([]model.Produ
 	// query string ob=5 means sort by review, which I assume it's the top product
 	tokpedUrl := []string{
 		"https://www.tokopedia.com/p/handphone-tablet/handphone?ob=5&page=1",
-		"https://www.tokopedia.com/p/handphone-tablet/handphone?ob=5&page=2",
+		// "https://www.tokopedia.com/p/handphone-tablet/handphone?ob=5&page=2",
 	}
 
-	maxProduct := 100
+	maxProduct := 10
 	productList := []model.Product{}
 	for _, url := range tokpedUrl {
-		if len(productList) > 100 {
+		if len(productList) > maxProduct {
 			break
 		}
+		fmt.Println("Start Retrieving Top product Page : ", url)
 
 		products, err := ScrapProductListPage(client, url)
 		if err != nil {
@@ -34,8 +34,9 @@ func ScrapTopProductList(client *headlessclient.RLHeadlessClient) ([]model.Produ
 			continue
 		}
 
-		productRange := maxProduct - len(productList)
+		productRange := (maxProduct - len(productList)) - 1
 		productList = append(productList, products[0:productRange]...)
+		fmt.Println("Done")
 	}
 
 	return productList, nil
@@ -57,7 +58,7 @@ func ScrapProductListPage(client *headlessclient.RLHeadlessClient, url string) (
 
 func ScrapProductDetailPage(client *headlessclient.RLHeadlessClient, product model.Product) (model.Product, error) {
 
-	startTime := time.Now()
+	// startTime := time.Now()
 
 	stringHtml, err := RetrieveProductDetailPage(client, product.ProductUrl)
 	if err != nil {
@@ -69,10 +70,8 @@ func ScrapProductDetailPage(client *headlessclient.RLHeadlessClient, product mod
 		return product, err
 	}
 
-	endTime := time.Now()
-	timeDiff := endTime.Sub(startTime)
+	// timeDiff := time.Now().Sub(startTime)
+	// fmt.Println("ScrapProductDetailPage finished in : ", timeDiff)
 
-	fmt.Println("ScrapProductDetailPage finished in : ", timeDiff)
-
-	return product, err
+	return product, nil
 }

@@ -52,7 +52,6 @@ func (c CsvRepo) Save(products []model.Product) error {
 			endRow = len(products) - 1
 		}
 
-		fmt.Println("start : ", startRow, "end : ", endRow)
 		err := c.executeWrite(filePath, products[startRow:endRow])
 		if err != nil {
 			return err
@@ -83,7 +82,7 @@ func (c CsvRepo) executeWrite(filePath string, products []model.Product) error {
 
 		strData := []string{
 			product.Name,
-			strconv.FormatFloat(float64(product.Rating), 'f', -1, 64),
+			strconv.FormatFloat(product.Rating, 'f', -1, 64),
 			strconv.FormatFloat(product.Price, 'f', -2, 64),
 			product.Merchant,
 			product.ProductUrl,

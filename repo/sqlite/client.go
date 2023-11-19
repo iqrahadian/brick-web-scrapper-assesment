@@ -14,6 +14,8 @@ func NewClient() *gorm.DB {
 		panic(err)
 	}
 
+	db.Exec("delete from products")
+
 	err = db.AutoMigrate(&model.Product{})
 	if err != nil {
 		fmt.Println("ERROR MIGRATE")
