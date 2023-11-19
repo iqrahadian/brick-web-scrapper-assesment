@@ -1,24 +1,15 @@
 package scrapper
 
 import (
-	"github.com/go-rod/rod"
+	"time"
+
+	"github.com/iqrahadian/brick-web-scrapper-assesment/repo/headlessclient"
 )
 
-func retrieveHtmlPage(url string) (string, error) {
-
-	page := rod.New().MustConnect().MustPage(url).MustWaitStable()
-	defer page.MustClose()
-	page.Mouse.MustScroll(0, 300)
-
-	stringHtml, err := page.HTML()
-	return stringHtml, err
-
+func RetrieveProductListPage(hc *headlessclient.RLHeadlessClient, url string) (string, error) {
+	return hc.RetrieveHtml(url, 2*time.Second)
 }
 
-func RetrieveProductListPage(url string) (string, error) {
-	return retrieveHtmlPage(url)
-}
-
-func RetrieveProductDetailPage(url string) (string, error) {
-	return retrieveHtmlPage(url)
+func RetrieveProductDetailPage(hc *headlessclient.RLHeadlessClient, url string) (string, error) {
+	return hc.RetrieveHtml(url, 1*time.Second)
 }

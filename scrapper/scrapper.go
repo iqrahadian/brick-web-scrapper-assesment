@@ -1,12 +1,15 @@
 package scrapper
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/iqrahadian/brick-web-scrapper-assesment/model"
-	"github.com/iqrahadian/brick-web-scrapper-assesment/repo/httpclient"
+	"github.com/iqrahadian/brick-web-scrapper-assesment/repo/headlessclient"
 )
 
-func ScrapProductListPage(client *httpclient.RLHTTPClient, url string) ([]model.Product, error) {
-	stringHtml, err := RetrieveProductListPage(url)
+func ScrapProductListPage(client *headlessclient.RLHeadlessClient, url string) ([]model.Product, error) {
+	stringHtml, err := RetrieveProductListPage(client, url)
 	if err != nil {
 		return []model.Product{}, err
 	}
@@ -19,9 +22,11 @@ func ScrapProductListPage(client *httpclient.RLHTTPClient, url string) ([]model.
 	return productList, nil
 }
 
-func ScrapProductDetailPage(client *httpclient.RLHTTPClient, product model.Product) (model.Product, error) {
+func ScrapProductDetailPage(client *headlessclient.RLHeadlessClient, product model.Product) (model.Product, error) {
 
-	stringHtml, err := RetrieveProductDetailPage(product.ProductUrl)
+	startTime := time.Now()
+
+	stringHtml, err := RetrieveProductDetailPage(client, product.ProductUrl)
 	if err != nil {
 		return product, err
 	}
@@ -30,6 +35,11 @@ func ScrapProductDetailPage(client *httpclient.RLHTTPClient, product model.Produ
 	if err != nil {
 		return product, err
 	}
+
+	endTime := time.Now()
+	timeDiff := endTime.Sub(startTime)
+
+	fmt.Println("ScrapProductDetailPage finished in : ", timeDiff)
 
 	return product, err
 }
