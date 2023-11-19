@@ -28,33 +28,13 @@ func main() {
 	// init multithread to scrape product detail
 	startProductScrapper(&wg, &headlessClient, jobChannel, reportChannel)
 
-	productList := []model.Product{}
-
-	tokpedUrl := []string{
-		"https://www.tokopedia.com/p/handphone-tablet/handphone?ob=5&page=1",
-		"https://www.tokopedia.com/p/handphone-tablet/handphone?ob=5&page=2",
-	}
-
-	productLen := 0
-	for _, url := range tokpedUrl {
-		if productLen > 100 {
-			break
-		}
-
-		products, err := scrapper.ScrapProductListPage(&headlessClient2, url)
-		if err != nil {
-			fmt.Errorf(
-				fmt.Sprintf("Failed to retrieve Product list page : ", url),
-				err,
-			)
-		}
-
-		productList = append(productList, products...)
-		productLen += 1
-	}
-
-	// submit all retrieved product to complete necessary data in product detail page
+	// retrieve and submit top product to complete necessary data in product detail page
 	// in this case we are looking for product rating & description
+	productList, err := scrapper.ScrapTopProductList(&headlessClient2)
+	if err != nil {
+		panic(err)
+	}
+
 	for _, product := range productList {
 		jobChannel <- product
 	}
@@ -75,9 +55,9 @@ func main() {
 	// inside the implementation we will chunk the row based on config submitted
 	csvRepo, _ := filerepo.NewFileRepo(filerepo.FileRepoCsvType, 2)
 
-	err := csvRepo.Save(finalProductList)
+	err = csvRepo.Save(finalProductList)
 	if err != nil {
-		fmt.Println("ERR", err)
+		fmt.Println("Failed to save CSV File", err)
 	}
 
 	// storing to sqlite database
@@ -93,18 +73,18 @@ func main() {
 		fmt.Println("FAILED to store data to persitence ", err)
 	}
 
-	// var users []model.Product
-	// // Get all records
-	// result = db.Find(&users)
+	// Re-retrieving data that has been inserted, validating the process
+	var products []model.Product
+	result = db.Find(&products)
 
-	// _, err = result.Rows()
-	// if err != nil {
-	// 	fmt.Println("Failed to select from database", err)
-	// }
-
-	// for _, prod := range users {
-	// 	fmt.Println(prod.ID, prod.Name)
-	// }
+	_, err = result.Rows()
+	if err != nil {
+		fmt.Println("Failed to select from database", err)
+	} else {
+		for _, prod := range products {
+			fmt.Println(prod.ID, prod.Name)
+		}
+	}
 
 	fmt.Println("DONE")
 
