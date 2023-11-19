@@ -33,7 +33,12 @@ func main() {
 
 	productList := []model.Product{}
 
+	productLen := 0
 	for _, url := range tokpedUrl {
+		if productLen > 100 {
+			break
+		}
+
 		products, err := scrapper.ScrapProductListPage(&httpClient, url)
 		if err != nil {
 			fmt.Errorf(
@@ -41,7 +46,9 @@ func main() {
 				err,
 			)
 		}
+
 		productList = append(productList, products...)
+		productLen += 1
 	}
 
 	for _, product := range productList {
