@@ -1,4 +1,4 @@
-package const
+package data
 
 var page2 = `<html lang="id" translate="no" data-rh="lang,translate"><head>
 <title>Promo Xiaomi Redmi 10 4/64 GB + 6/128 GB Garansi Resmi - 6/128 Promo Cicil 0% 3x - Jakarta Barat - duniagadgetku | Tokopedia</title>
