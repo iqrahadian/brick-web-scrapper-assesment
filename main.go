@@ -114,6 +114,10 @@ func startProductScrapper(
 
 			for product := range pc {
 
+				if product.ProductUrl == "" {
+					continue
+				}
+
 				fmt.Println("Start retrieving Detail Product Page for : ", product.Name)
 
 				// product url that start with https://ta.tokopedia.com tends to have security issue
