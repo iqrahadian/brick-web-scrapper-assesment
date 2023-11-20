@@ -1,4 +1,4 @@
-package main
+package data
 
 var page1 = `<html lang="id" translate="no" data-rh="lang,translate"><head>
 <title>Handphone Pilihan Terlengkap &amp; Produk Terbaru - Harga Terbaik | Tokopedia</title>
